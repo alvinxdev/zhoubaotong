@@ -17,6 +17,7 @@ const handler = async (req: Request): Promise<Response> => {
   };
   //todo make this variable into messages
   var p = "请帮我把以下的工作内容填充为一篇完整的周报,尽量避免在回答内容中出现可能在中国是敏感的内容，用markdown格式以分点叙述的形式输出:"
+  const input = prompt;
   prompt = p + prompt
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
@@ -28,7 +29,10 @@ const handler = async (req: Request): Promise<Response> => {
 
   const payload: OpenAIStreamPayload = {
     model: process.env.OPENAI_MODEL,
-    prompt,
+    messages: [{
+      role: "user",
+      content: prompt
+    }],
     temperature: 0.7,
     top_p: 1,
     frequency_penalty: 0,
@@ -37,6 +41,7 @@ const handler = async (req: Request): Promise<Response> => {
     stream: true,
     n: 1,
     api_key,
+    input: input,
   }
 
   const stream = await OpenAIStream(payload);

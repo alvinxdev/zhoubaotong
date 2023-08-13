@@ -1,6 +1,6 @@
 {
   "Index": {
-    "title": "周报生成器",
+    "title": "周报通",
     "switchLocale": "",
     "deployWiki": "部署自己的网站？",
     "description1": "简单描述工作内容 ",
@@ -11,6 +11,7 @@
     "step1": "简单描述一下你的工作内容",
     "helpPageLink": "(点击这里查看教程)",
     "placeholder": "比如：修复了优惠券无法领取的bug，为产品部的新APP设计UI和图标，负责跟进部门前端工程师的招聘",
+    "defaultchat": "修复了优惠券无法领取的bug，为产品部的新APP设计UI和图标，负责跟进部门前端工程师的招聘",
     "step2": "选择输出结果的形式。",
     "simplifierButton": "生成完整周报",
     "simplifiedContent": "优化后的内容",
@@ -25,6 +26,7 @@
     "clearButton": "清空",
     "notice":"因此网站的使用人数以不可思议的速度飙升，作者无力承担随之而来的运营成本，故决定此网站将在2023-02-15 00:00:00永久下线。有任何问题请通过GitHub上的邮箱联系",
     "API_KEY_NULL_ERROR": "API key不能为空",
-    "CONTENT_NULL_ERROR": "工作内容不能为空"
+    "CONTENT_NULL_ERROR": "工作内容不能为空",
+    "API_RES_ERROR": "Oops，出错了，请重试！"
   }
 }

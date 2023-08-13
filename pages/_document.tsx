@@ -8,27 +8,24 @@ class MyDocument extends Document {
           <link rel="icon" href="/favicon.ico" />
           <meta
             name="description"
-            content="Simplify your chat content in seconds."
+            content="周报通,周报生成器,周报通,帮你生成完整周报"
           />
-          <meta property="og:site_name" content="Chat Simplifier" />
-          <meta
-            property="og:description"
-            content="Simplify your chat content in seconds."
+         {/* Global Site Tag (gtag.js) - Google Analytics */}
+         <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
           />
-          <meta property="og:title" content="Chat Simplifier" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Chat Simplifier" />
-          <meta
-            name="twitter:description"
-            content="Simplify your chat content in seconds."
-          />
-          <meta
-            property="og:image"
-            content="https://chat-simplifier.vercel.app/og-image.png"
-          />
-          <meta
-            name="twitter:image"
-            content="https://chat-simplifier.vercel.app/og-image.png"
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}
           />
         </Head>
         <body>

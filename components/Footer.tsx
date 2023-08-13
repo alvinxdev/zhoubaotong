@@ -1,9 +1,16 @@
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function Footer() {
+  const [host, setHost] = useState("");
+
+  useEffect(() => {
+    setHost(window.location.host)
+  },[])
+
   return (
     <footer className="text-center h-16 sm:h-20 w-full sm:pt-2 pt-4 border-t mt-5 flex sm:flex-row flex-col justify-between items-center px-3 space-y-3 sm:mb-0 mb-3">
-      <div>
+      {/* <div>
         Powered by{" "}
         <a
           href="https://openai.com/"
@@ -22,10 +29,20 @@ export default function Footer() {
         >
           Vercel Edge Functions.
         </a>
+      </div> */}
+      <div>
+        <Link href="mailto:zhoubaotong.com@gmail.com" target="_blank">zhoubaotong.com@gmail.com</Link>
+        {host && ['zhoubaotong.com', 'zhoubaotong.cn'].includes(host) && (
+          <>
+            <label className="px-2">|</label>
+            <Link href="https://beian.miit.gov.cn" target="_blank" rel="noopener noreferrer">粤ICP备20029152号</Link>
+          </>
+        )}
       </div>
       <div className="flex space-x-4 pb-4 sm:pb-0">
         <Link
-          href="https://github.com/guaguaguaxia/weekly_report"
+          target="_blank"
+          href="https://github.com/alvinxdev/zhoubaotong"
           className="group"
           aria-label="TaxPal on GitHub"
         >

@@ -2,7 +2,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRef } from "react";
 import { useTranslations } from 'next-intl'
 import { Toaster, toast } from "react-hot-toast";
 import DropDown, { FormType } from "../components/DropDown";
@@ -22,8 +23,7 @@ const Home: NextPage = () => {
   const [form, setForm] = useState<FormType>("paragraphForm");
   const [api_key, setAPIKey] = useState("")
   const [generatedChat, setGeneratedChat] = useState<String>("");
-
-  console.log("Streamed response: ", generatedChat);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const prompt =
     form === 'paragraphForm'?
@@ -42,10 +42,13 @@ const Home: NextPage = () => {
       return
     }
     if (chat == ""){
-      toast.error(t("CONTENT_NULL_ERROR"))
-      setLoading(false)
-      return
+      setChat(t('defaultchat'));
+      // toast.error(t("CONTENT_NULL_ERROR"))
+      // setLoading(false)
+      // return
     }
+    //@ts-ignore 
+    if (window?.gtag) window.gtag('event', 'generate_report');
     const response = useUserKey ?
       await fetch("/api/generate", {
         method: "POST",
@@ -53,7 +56,7 @@ const Home: NextPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt,
+          prompt: (prompt === '' ? t('defaultchat') : prompt),
           api_key,
         }),
       })
@@ -64,13 +67,15 @@ const Home: NextPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt,
+          prompt: (prompt === '' ? t('defaultchat') : prompt),
         }),
       })
 
     console.log("Edge function returned.");
 
     if (!response.ok) {
+      setLoading(false);
+      toast.error(t("API_RES_ERROR"))
       throw new Error(response.statusText);
     }
 
@@ -89,6 +94,9 @@ const Home: NextPage = () => {
       done = doneReading;
       const chunkValue = decoder.decode(value).replace("<|im_end|>", "");
       setGeneratedChat((prev) => prev + chunkValue);
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+      }
     }
 
     setLoading(false);
@@ -103,20 +111,6 @@ const Home: NextPage = () => {
 
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        
-
-
-      <a
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-          href="https://github.com/guaguaguaxia/weekly_report"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Github />
-          <p>Star on GitHub</p>
-        </a>
-
-
 
         <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900">
           {t('description1')} <br></br><div               className=" px-4 py-2 sm:mt-3 mt-8 hover:bg-black/80 w-full"></div>{t('description2')}
@@ -191,7 +185,7 @@ const Home: NextPage = () => {
                 {t('privacyPolicy1')}
               <a
                 className="text-blue-200 hover:text-blue-400"
-                href="https://github.com/guaguaguaxia/weekly_report/blob/main/privacy.md"
+                href="https://github.com/alvinxdev/zhoubaotong/blob/main/privacy.md"
                 target="_blank"
                 rel="noopener noreferrer"
               >{' '}{t('privacyPolicy2')}</a>
@@ -219,7 +213,7 @@ const Home: NextPage = () => {
                       className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                       onClick={() => {
                         navigator.clipboard.writeText(generatedChat.trim());
-                        toast("Chat copied to clipboard", {
+                        toast("周报内容复制成功！", {
                           icon: "✂️",
                         });
                       }}
@@ -244,6 +238,7 @@ const Home: NextPage = () => {
         </ResizablePanel>
       </main>
       <Footer />
+      <div ref={messagesEndRef}></div>
     </div>
   );
 };
